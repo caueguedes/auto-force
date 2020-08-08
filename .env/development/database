@@ -1,0 +1,3 @@
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=auto-force-challenge
+POSTGRES_DB=auto_force_development
