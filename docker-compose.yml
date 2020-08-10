@@ -11,6 +11,8 @@ services:
     env_file:
       - .env/development/database
       - .env/development/web
+    tty: true
+    stdin_open: true
 
   database:
     image: postgres
