@@ -24,13 +24,13 @@ ActiveRecord::Schema.define(version: 2020_08_09_055827) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.string "reference", null: false
-    t.string "purchase_channel", null: false
-    t.string "client_name", null: false
-    t.text "address", null: false
-    t.string "delivery_service", null: false
-    t.decimal "total_value", null: false
-    t.jsonb "line_items", null: false
+    t.string "reference"
+    t.string "purchase_channel"
+    t.string "client_name"
+    t.text "address"
+    t.string "delivery_service"
+    t.decimal "total_value"
+    t.jsonb "line_items"
     t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
