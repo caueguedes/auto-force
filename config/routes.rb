@@ -3,14 +3,15 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :orders, only: :create do
         collection do
-          get '/status', to: 'orders#order_status', as: 'status'
-          get '/list', to: 'orders#list', as: 'list'
+          get '/status', to: 'orders#check_status', as: 'status'
+          get '/:purchase_channel/list', to: 'orders#list', as: 'list'
         end
       end
 
-      resources :batches do
+      resources :batches, only: :create do
         collection do
-
+          put '/:reference/produce', to: 'batches#produce'
+          put '/:reference/close', to: 'batches#close'
         end
       end
     end

@@ -1,30 +1,17 @@
 require "rails_helper"
 
-RSpec.describe BatchesController, type: :routing do
+RSpec.describe Api::V1::BatchesController, type: :routing do
   describe "routing" do
-    it "routes to #index" do
-      expect(:get => "/batches").to route_to("batches#index")
-    end
-
-    it "routes to #show" do
-      expect(:get => "/batches/1").to route_to("batches#show", :id => "1")
-    end
-
-
     it "routes to #create" do
-      expect(:post => "/batches").to route_to("batches#create")
+      expect(:post => "/api/v1/batches").to route_to("api/v1/batches#create")
     end
 
     it "routes to #update via PUT" do
-      expect(:put => "/batches/1").to route_to("batches#update", :id => "1")
+      expect(:put => "/api/v1/batches/47d63d2/produce").to route_to("api/v1/batches#produce", :reference => "47d63d2")
     end
 
-    it "routes to #update via PATCH" do
-      expect(:patch => "/batches/1").to route_to("batches#update", :id => "1")
-    end
-
-    it "routes to #destroy" do
-      expect(:delete => "/batches/1").to route_to("batches#destroy", :id => "1")
+    it "routes to #update via PUT" do
+      expect(:put => "/api/v1/batches/47d63d2/close").to route_to("api/v1/batches#close", :reference => "47d63d2")
     end
   end
 end
