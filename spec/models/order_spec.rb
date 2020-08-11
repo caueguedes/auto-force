@@ -58,7 +58,8 @@ RSpec.describe Order, type: :model do
 
     context 'when the order has a status not in the interval of 0 end 4' do
       it 'rejects the order as invalid' do
-        expect { build(:order, status:5) }.to raise_error
+        expect { build(:order, status:5) }.to raise_error ArgumentError
+        expect { build(:order, status:-1) }.to raise_error ArgumentError
       end
     end
   end
