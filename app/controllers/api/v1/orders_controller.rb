@@ -1,16 +1,6 @@
 class Api::V1::OrdersController < ApplicationController
-  before_action :set_order, only: [:order_status]
+  before_action :set_orders, only: [:check_status]
 
-  def list
-    closing = 2
-    @orders = Order.filter(params.slice(:status, :purchase_channel).with_defaults(status: closing))
-
-    render json: @orders
-  end
-
-  def order_status
-    render json: @order
-  end
 
   def create
     @order = Order.new(order_params)
@@ -23,9 +13,20 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
+  def check_status
+    render json: @order
+  end
+
+  def list
+    closing = 2
+    @orders = Order.filter(params.slice(:status, :purchase_channel).with_defaults(status: closing))
+
+    render json: @orders
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_order
+    def set_orders
       @order = Order.filter(params.slice(:reference, :client_name))
     end
 
