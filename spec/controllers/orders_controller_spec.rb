@@ -23,29 +23,52 @@ require 'rails_helper'
 # removed from Rails core in Rails 5, but can be added back in via the
 # `rails-controller-testing` gem.
 
-RSpec.describe OrdersController, type: :controller do
+RSpec.describe Api::V1::OrdersController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
   # Order. As you add validations to Order, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+  let(:valid_attributes) { {
+      "reference": "BR102030",
+      "purchase_channel": "Site BR",
+      "client_name": "São Clênio",
+      "address": "Av. Amintas Barros Nº 3700 - Torre Business, Sala 702 - Lagoa Nova CEP: 59075-250",
+      "delivery_service": "SEDEX",
+      "total_value": "123.3",
+      "line_items": "[{sku: case-my-best-friend, model: iPhone X, case type: Rose Leather}, {sku: powebank-sunshine, capacity: 10000mah}, {sku: earphone-standard, color: white}]",
+      "status": "published"
+    }
   }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:invalid_attributes) { { "reference": "BR102030" } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # OrdersController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "returns a success response" do
-      order = Order.create! valid_attributes
-      get :index, params: {}, session: valid_session
-      expect(response).to be_successful
+  describe "GET #status" do
+    context 'using reference' do
+      it "returns a success response" do
+        order = Order.create! valid_attributes
+        create(:order, reference: "BR102031" )
+
+        get 'check_status', params: { "reference": order.reference}
+        expect(response).to be_successful
+        expect(JSON.load response.body).to include_json(JSON.load(IO.read'spec/controllers/responses/order_by_reference.json'))
+      end
+    end
+
+    context 'using client_name' do
+      it "returns a success response" do
+        create(:order, reference: "BR102031" )
+        order = Order.create! valid_attributes
+
+        get 'check_status', params: {client_name: order.client_name}
+        expect(response).to be_successful
+        binding.pry
+        expect(JSON.load response.body).to include_json(JSON.load(IO.read'spec/controllers/responses/order_by_name.json'))
+      end
     end
   end
 
@@ -66,20 +89,41 @@ RSpec.describe OrdersController, type: :controller do
       end
 
       it "renders a JSON response with the new order" do
+        post :create, params: {order: valid_attributes}
 
-        post :create, params: {order: valid_attributes}, session: valid_session
         expect(response).to have_http_status(:created)
-        expect(response.content_type).to eq('application/json')
-        expect(response.location).to eq(order_url(Order.last))
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+        expect(JSON.load response.body).to include_json(JSON.load(IO.read'spec/controllers/responses/order_created.json'))
+      end
+
+      context "try to create twice the same order" do
+        it 'returns reference already taken' do
+          post :create, params: {order: valid_attributes}
+
+          post :create, params: {order: valid_attributes}
+          expect(response.content_type).to eq('application/json; charset=utf-8')
+          expect(JSON.load response.body).to include_json(JSON.load(IO.read'spec/controllers/responses/order_sent_twice.json'))
+        end
       end
     end
 
-    context "with invalid params" do
-      it "renders a JSON response with errors for the new order" do
 
-        post :create, params: {order: invalid_attributes}, session: valid_session
+    context "without params" do
+      it "renders a JSON response with error" do
+        post :create
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+        expect(response.body).to include_json(JSON.load(IO.read'spec/controllers/responses/order_required.json'))
+      end
+    end
+
+    context "with partial params" do
+      it "renders a JSON response with errors for the new order" do
+        post :create, params: invalid_attributes
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to eq('application/json; charset=utf-8')
+
+        expect(response.body).to include_json(JSON.load(IO.read'spec/controllers/responses/order_invalid.json'))
       end
     end
   end
@@ -116,14 +160,4 @@ RSpec.describe OrdersController, type: :controller do
       end
     end
   end
-
-  describe "DELETE #destroy" do
-    it "destroys the requested order" do
-      order = Order.create! valid_attributes
-      expect {
-        delete :destroy, params: {id: order.to_param}, session: valid_session
-      }.to change(Order, :count).by(-1)
-    end
-  end
-
 end

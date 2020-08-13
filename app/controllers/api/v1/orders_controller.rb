@@ -1,12 +1,10 @@
 class Api::V1::OrdersController < ApplicationController
   before_action :set_orders, only: [:check_status]
 
-
   def create
     @order = Order.new(order_params)
 
     if @order.save
-      print "\n#########\n #{@order.pretty_print_inspect} \n##############\n"
       render json: @order, status: :created
     else
       render json: @order.errors, status: :unprocessable_entity
@@ -18,6 +16,7 @@ class Api::V1::OrdersController < ApplicationController
   end
 
   def list
+    binding.pry
     closing = 2
     @orders = Order.filter(params.slice(:status, :purchase_channel).with_defaults(status: closing))
 
