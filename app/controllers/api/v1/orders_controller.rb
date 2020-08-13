@@ -1,5 +1,7 @@
 class Api::V1::OrdersController < ApplicationController
-  before_action :set_orders, only: [:check_status]
+  include Pagination
+
+  before_action :set_paginate_params, only: [:check_status, :list]
 
   def create
     @order = Order.new(order_params)
@@ -7,30 +9,32 @@ class Api::V1::OrdersController < ApplicationController
     if @order.save
       render json: @order, status: :created
     else
-      render json: @order.errors, status: :unprocessable_entity
+      render json: error(@order.errors), status: :unprocessable_entity
     end
   end
 
   def check_status
-    render json: @order
+    order = Order.filter(status_params)
+    render json: paginate(order)
   end
 
   def list
-    binding.pry
-    closing = 2
-    @orders = Order.filter(params.slice(:status, :purchase_channel).with_defaults(status: closing))
-
-    render json: @orders
+    @orders = Order.filter(list_params)
+    render json: paginate(@orders)
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_orders
-      @order = Order.filter(params.slice(:reference, :client_name))
-    end
 
-    # Only allow a trusted parameter "white list" through.
+  private
     def order_params
       params.require(:order).permit(:reference, :purchase_channel, :client_name, :address, :delivery_service, :total_value, :line_items)
+    end
+
+    def status_params
+      return params.permit(:client_name, :reference) unless params.slice(:client_name, :reference).empty?
+      raise ActionController::ParameterMissing.new("reference")
+    end
+
+    def list_params
+      params.slice(:status, :purchase_channel).with_defaults(status: 2)
     end
 end

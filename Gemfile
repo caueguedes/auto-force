@@ -27,6 +27,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 # Added active model serializer for model serialization
 gem 'active_model_serializers'
+gem 'kaminari'
 
 
 group :development, :test do
