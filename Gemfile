@@ -35,6 +35,8 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem "rubycritic", require: false
   gem 'pry-rails'
+  gem 'rspec-json_expectations'
+
 end
 
 group :development do
