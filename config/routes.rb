@@ -15,7 +15,7 @@ Rails.application.routes.draw do
         end
       end
 
-      get '/financial', to: 'financial#report', as: 'report'
+      get '/financial/report', to: 'financial#report', as: 'report'
     end
   end
   match '*a', to: 'application#routing_error', via: :all
