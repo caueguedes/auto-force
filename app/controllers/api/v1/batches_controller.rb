@@ -1,43 +1,41 @@
 class Api::V1::BatchesController < ApplicationController
   before_action :set_batch, only: [:produce, :close]
 
-  # POST /batches
   def create
-    @batch = Batch.new(purchase_channel: params[:purchase_channel])
+    response = BatchManager::CreateBatch.call(purchase_channel: batch_params)
 
-    if @batch.save
-      render json: @batch, status: :created
+    if response.success?
+      render json: response.data, status: :created
     else
-      render json: @batch.errors, status: :unprocessable_entity
+      render json: response.errors, status: :unprocessable_entity
     end
   end
 
-  # PUT /batches/:reference/produce
   def produce
-    if @batch.produce
-      render json: @batch
+    response = BatchManager::ProduceBatch.call(batch: @batch,
+                                               delivery_service: params.require(:delivery_service))
+    if response.success?
+      render json: response.data
     else
-      render json: @batch.errors, status: :unprocessable_entity
+      render json: response.errors, status: :unprocessable_entity
     end
   end
 
-  # PUT /batches/:reference/close
   def close
-    if @batch.close
-      render json: @batch
+    response = BatchManager::CloseBatchToDelivery.call(close_params)
+    if response.success?
+      render json: response.data
     else
-      render json: @batch.errors, status: :unprocessable_entity
+      render json: response.errors, status: :unprocessable_entity
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_batch
-      @batch = Batch.find(params[:reference])
+      @batch = Batch.filter(params.slice(:reference))
     end
 
-    # Only allow a trusted parameter "white list" through.
-    def batch_params
-      params.require(:batch).permit(:reference, :purchase_channel)
-    end
+    def batch_params; params.require(:purchase_channel); end
+    def close_params; params.slice(:reference, :delivery_channel); end
+    def produce_params; params.slice(:reference); end
 end
