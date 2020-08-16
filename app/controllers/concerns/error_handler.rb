@@ -2,8 +2,7 @@ module ErrorHandler
   extend ActiveSupport::Concern
 
   def parameter_missing(_e)
-    render json: error({ "#{_e.param.to_s}": "#{_e.param.to_s} param is required" }),
-           status: 422
+    render json: error( _e.message ), status: 422
   end
 
   def routing_error
