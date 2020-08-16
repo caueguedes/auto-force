@@ -6,7 +6,9 @@ RUN apk update && apk add --no-cache bash \
     build-base \
     nodejs \
     postgresql-dev \
-    tzdata
+    tzdata \
+    libssl-dev
+
 
 COPY Gemfile* /usr/src/app/
 WORKDIR /usr/src/app
