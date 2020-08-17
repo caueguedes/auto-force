@@ -23,7 +23,7 @@ class Api::V1::BatchesController < ApplicationController
   end
 
   def close
-    response = BatchManager::CloseBatchToDelivery.call(batch: @batch, delivery_channel: delivery_param)
+    response = BatchManager::CloseBatchToDelivery.call(batch: @batch, delivery_service: delivery_param)
     binding.pry
     if response.success?
       render json: response.data
@@ -38,6 +38,6 @@ class Api::V1::BatchesController < ApplicationController
     end
 
     def batch_params; params.require(:purchase_channel); end
-    def delivery_param; params.require(:delivery_channel); end
+    def delivery_param; params.require(:delivery_service); end
     def require_reference; params.require(:reference); end
 end

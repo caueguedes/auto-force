@@ -5,7 +5,6 @@ class Api::V1::OrdersController < ApplicationController
 
   def create
     @order = Order.new(order_params)
-
     if @order.save
       render json: @order, status: :created
     else
@@ -22,7 +21,6 @@ class Api::V1::OrdersController < ApplicationController
     @orders = Order.filter(list_params)
     render json: paginate(@orders)
   end
-
 
   private
     def order_params
