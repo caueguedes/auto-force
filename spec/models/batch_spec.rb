@@ -10,7 +10,6 @@ RSpec.describe Batch, type: :model do
     it 'creates a Batch' do
       # batch = create(:batch, :with_enough_orders)
       expect(batch).to be_valid
-      binding.pry
       expect(batch.orders.count).to eql 2
       expect(batch.orders.first.batch_id).not_to be_nil
       expect(batch.orders.first.status).to eql "production"

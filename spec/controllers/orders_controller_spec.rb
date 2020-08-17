@@ -66,7 +66,6 @@ RSpec.describe Api::V1::OrdersController, type: :controller do
 
         get 'check_status', params: {client_name: order.client_name}
         expect(response).to be_successful
-        binding.pry
         expect(JSON.load response.body).to include_json(JSON.load(IO.read'spec/controllers/responses/order_by_name.json'))
       end
     end
