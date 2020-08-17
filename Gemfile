@@ -28,7 +28,6 @@ gem 'bootsnap', '>= 1.4.2', require: false
 # Added active model serializer for model serialization
 gem 'active_model_serializers'
 gem 'kaminari'
-gem 'wisper', '2.0.0'
 
 
 group :development, :test do
@@ -38,7 +37,6 @@ group :development, :test do
   gem "rubycritic", require: false
   gem 'pry-rails'
   gem 'rspec-json_expectations'
-
 end
 
 group :development do
