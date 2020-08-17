@@ -8,7 +8,7 @@ module BatchValidator
   end
 
   def validate_has_orders
-    errors.add(:orders, ", not enough orders to create a batch") if orders.empty?
+    errors.add(:orders, 'not enough orders to create a batch.') if orders.empty?
   end
 
   def set_reference

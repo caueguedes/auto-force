@@ -7,35 +7,37 @@ class Api::V1::BatchesController < ApplicationController
     if response.success?
       render json: response.data, status: :created
     else
-      render json: response.errors, status: :unprocessable_entity
+      render json: error(response.errors), status: :unprocessable_entity
     end
   end
 
   def produce
-    response = BatchManager::ProduceBatch.call(batch: @batch,
-                                               delivery_service: params.require(:delivery_service))
+    binding.pry
+    response = BatchManager::ProduceBatch.call(batch: @batch)
+
     if response.success?
       render json: response.data
     else
-      render json: response.errors, status: :unprocessable_entity
+      render json: error(response.errors), status: :unprocessable_entity
     end
   end
 
   def close
-    response = BatchManager::CloseBatchToDelivery.call(close_params)
+    response = BatchManager::CloseBatchToDelivery.call(batch: @batch, delivery_channel: delivery_param)
+    binding.pry
     if response.success?
       render json: response.data
     else
-      render json: response.errors, status: :unprocessable_entity
+      render json: error(response.errors), status: :unprocessable_entity
     end
   end
 
   private
     def set_batch
-      @batch = Batch.filter(params.slice(:reference))
+      @batch = Batch.find_by!(reference: require_reference)
     end
 
     def batch_params; params.require(:purchase_channel); end
-    def close_params; params.slice(:reference, :delivery_channel); end
-    def produce_params; params.slice(:reference); end
+    def delivery_param; params.require(:delivery_channel); end
+    def require_reference; params.require(:reference); end
 end

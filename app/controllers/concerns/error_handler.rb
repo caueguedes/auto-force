@@ -1,6 +1,10 @@
 module ErrorHandler
   extend ActiveSupport::Concern
 
+  def record_not_found(_e)
+    render json: error( _e.message ), status: 404
+  end
+
   def parameter_missing(_e)
     render json: error( _e.message ), status: 422
   end
