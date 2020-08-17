@@ -12,7 +12,6 @@ class Api::V1::BatchesController < ApplicationController
   end
 
   def produce
-    binding.pry
     response = BatchManager::ProduceBatch.call(batch: @batch)
 
     if response.success?
@@ -24,7 +23,6 @@ class Api::V1::BatchesController < ApplicationController
 
   def close
     response = BatchManager::CloseBatchToDelivery.call(batch: @batch, delivery_service: delivery_param)
-    binding.pry
     if response.success?
       render json: response.data
     else

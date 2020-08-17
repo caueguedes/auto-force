@@ -6,7 +6,7 @@ module BatchManager
     end
 
     def call
-      return Error.new "No orders with delivery service: #{@delivery_service} to be produced." unless orders_with_delivery_service?
+      return Error.new "No orders with delivery service #{@delivery_service} to be produced." unless orders_with_delivery_service?
 
       @batch.orders.where(delivery_service: @delivery_service).closing.lock.update(status: :sent)
 

@@ -8,13 +8,14 @@ module Pagination
 
   private
     def paginate(entity)
-      entity_data = entity.page(@page).per(@per_page)
-      paginated_hash(entity_data, entity_data.total_pages)
+      collection = entity.page(@page).per(@per_page)
+      return { data: "No Records Found" } if collection.empty?
+
+      { data:  collection }.merge( pagination_hash( collection.total_pages ) )
     end
 
-    def paginated_hash(entity_data, total_pages)
+    def pagination_hash(total_pages)
       {
-          data: entity_data,
           pagination: {
             current_page: @page,
             per_page: @per_page,
