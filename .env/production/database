@@ -1,0 +1,3 @@
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=autoforce
+POSTGRES_DB=auto_force_production
