@@ -5,9 +5,14 @@ module BatchManager
     end
 
     def call
-      orders = Order.where(batch_id: @batch).production
-      orders.lock.update(status: :closing)
-      Success @batch.orders = orders
+      return Error.new 'no orders with status production.' unless orders_on_production?
+      @batch.orders.production.lock.update(status: :closing)
+      Success.new @batch
     end
+
+    private
+      def orders_on_production?
+        @batch.orders.production.any?
+      end
   end
 end
