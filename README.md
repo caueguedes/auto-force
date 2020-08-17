@@ -22,6 +22,7 @@ rails       | 6.0
 - docker-compose exec web bundle exec rspec
 - rspec
 
+some test were not updadated due time.
 
 ## Additional Stuff?
 
