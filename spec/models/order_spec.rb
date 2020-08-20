@@ -2,14 +2,16 @@ require 'rails_helper'
 
 RSpec.describe Order, type: :model do
   context 'with a valid order' do
-    let(:order) {build(:order)}
+    let!(:order) {create(:order)}
     it 'creates a order record' do
       expect(order).to be_valid
     end
 
-    it 'creates a duplicated reference order' do
-      create(:order)
-      expect(order).to_not be_valid
+    context 'try to creates a order with a duplicated reference' do
+      it 'rejects the order as invalid' do
+        order2 = build(:order, reference: order.reference)
+        expect(order2).to_not be_valid
+      end
     end
   end
 

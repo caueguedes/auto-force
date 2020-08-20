@@ -1,23 +1,22 @@
 {
-  "address": [
-    "can't be blank"
-  ],
-  "client_name": [
-    "can't be blank"
-  ],
-  "delivery_service": [
-    "can't be blank"
-  ],
-  "line_items": [
-    "can't be blank"
-  ],
-  "purchase_channel": [
-    "can't be blank"
-  ],
-  "reference": [
-    "can't be blank"
-  ],
-  "total_value": [
-    "is not a number"
-  ]
+  "error": {
+    "address": [
+      "can't be blank"
+    ],
+    "client_name": [
+      "can't be blank"
+    ],
+    "delivery_service": [
+      "can't be blank"
+    ],
+    "line_items": [
+      "can't be blank"
+    ],
+    "purchase_channel": [
+      "can't be blank"
+    ],
+    "total_value": [
+      "is not a number"
+    ]
+  }
 }

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :order do
-    reference { "BR102030" }
+    sequence(:reference) { |n| "BR10203#{n}" }
     purchase_channel { "Site BR" }
     client_name { "São Clênio" }
     address { "Av. Amintas Barros Nº 3700 - Torre Business, Sala 702 - Lagoa Nova CEP: 59075-250" }
