@@ -17,7 +17,7 @@ RSpec.describe Batch, type: :model do
 
     it 'creates a valid Batch' do
       expect(@batch).to be_valid
-      Order.where(batch_id: @batch).count.should be_eql 3
+      expect(Order.where(batch_id: @batch).count).to be_eql 3
     end
   end
 end
