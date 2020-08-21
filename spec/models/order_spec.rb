@@ -7,7 +7,7 @@ RSpec.describe Order, type: :model do
       expect(order).to be_valid
     end
 
-    context 'try to creates a order with a duplicated reference' do
+    context 'try to creates a order with reference duplicated' do
       it 'rejects the order as invalid' do
         order2 = build(:order, reference: order.reference)
         expect(order2).to_not be_valid

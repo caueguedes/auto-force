@@ -125,5 +125,4 @@ RSpec.describe Api::V1::BatchesController, type: :controller do
   #     }.to change(Batch, :count).by(-1)
   #   end
   # end
-
 end

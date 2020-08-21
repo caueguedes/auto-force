@@ -1,26 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe Batch, type: :model do
-  let(:order1) { build_stubbed(:order, reference:"BR102030") }
-  let(:order2) { build_stubbed(:order, reference:"BR102031") }
-
-  context 'have enough records to generate a Batch' do
-    let(:batch) { create(:batch, :with_enough_orders) }
-
-    it 'creates a Batch' do
-      # batch = create(:batch, :with_enough_orders)
-      expect(batch).to be_valid
-      expect(batch.orders.count).to eql 2
-      expect(batch.orders.first.batch_id).not_to be_nil
-      expect(batch.orders.first.status).to eql "production"
+  context 'without enough orders' do
+    it 'rejects the batch as invalid' do
+      expect(build(:batch)).to_not be_valid
     end
   end
 
-  context 'have a batch created(publishe with orders production)' do
+  context 'with enough orders' do
+    before(:each) do
+      create(:order, purchase_channel: 'Other site')
+      @batch = build(:batch)
+      @batch.orders= create_list(:order, 3)
+      @batch.save
+    end
 
-  end
-
-  context 'does not have enough records to generate a Batch' do
-
+    it 'creates a valid Batch' do
+      expect(@batch).to be_valid
+      Order.where(batch_id: @batch).count.should be_eql 3
+    end
   end
 end
