@@ -9,7 +9,7 @@ module Pagination
   private
     def paginate(entity)
       collection = entity.page(@page).per(@per_page)
-      return { data: "No Records Found" } if collection.empty?
+      raise ActiveRecord::RecordNotFound.new('No Records Found') if collection.empty?
 
       { data:  collection }.merge( pagination_hash( collection.total_pages ) )
     end
