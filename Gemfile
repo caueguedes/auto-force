@@ -27,8 +27,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 # Added active model serializer for model serialization
 gem 'active_model_serializers'
+gem 'fast_jsonapi'
 gem 'kaminari'
-
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

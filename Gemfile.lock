@@ -90,6 +90,8 @@ GEM
     factory_bot_rails (6.1.0)
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
+    fast_jsonapi (1.5)
+      activesupport (>= 4.2)
     ffi (1.13.1)
     flay (2.12.1)
       erubis (~> 2.7.0)
@@ -252,7 +254,6 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    wisper (2.0.0)
     zeitwerk (2.4.0)
 
 PLATFORMS
@@ -262,6 +263,7 @@ DEPENDENCIES
   active_model_serializers
   bootsnap (>= 1.4.2)
   factory_bot_rails
+  fast_jsonapi
   kaminari
   listen (~> 3.2)
   pg (>= 0.18, < 2.0)
@@ -274,7 +276,6 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
-  wisper (= 2.0.0)
 
 RUBY VERSION
    ruby 2.7.1p83
